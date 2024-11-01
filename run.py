@@ -1,5 +1,3 @@
-# quiz_app.py
-
 import streamlit as st
 from questions_db import quiz_data, generate_mixed_quiz
 
@@ -31,7 +29,7 @@ def main():
 
     initialize_session_state()
 
-    # Add Mixed Quiz option to week selection
+  
     weeks = ["Select Week", "Mixed Quiz (50 Questions)"] + list(quiz_data.keys())
     week = st.selectbox(
         "Select Quiz Mode:",
@@ -39,7 +37,7 @@ def main():
         index=weeks.index(st.session_state.current_week)
     )
 
-    # Reset state when week/mode changes
+
     if week != st.session_state.current_week:
         st.session_state.current_week = week
         st.session_state.current_question_index = 0
@@ -54,7 +52,7 @@ def main():
         st.info("Please select a quiz mode to begin!")
         return
 
-    # Get current questions based on mode
+
     if week == "Mixed Quiz (50 Questions)":
         questions = st.session_state.mixed_quiz_questions
     else:
@@ -62,16 +60,15 @@ def main():
 
     current_question = questions[st.session_state.current_question_index]
 
-    # Display question and progress
     st.markdown(f"### Question {st.session_state.current_question_index + 1} of {len(questions)}")
 
-    # Show source week for mixed quiz
+
     if week == "Mixed Quiz (50 Questions)":
         st.markdown(f"*Source: {current_question['source_week']}*")
 
     st.markdown(f"**{current_question['question']}**")
 
-    # Answer selection
+
     if isinstance(current_question["correct_answer"], list):
         answer = st.multiselect(
             "Select all correct answers:",
@@ -85,7 +82,7 @@ def main():
             disabled=st.session_state.submitted
         )
 
-    # Handle submission
+
     if not st.session_state.submitted:
         if st.button("Submit"):
             st.session_state.submitted = True
@@ -103,7 +100,7 @@ def main():
             else:
                 st.error("❌ Incorrect!")
 
-    # Post-submission options
+
     if st.session_state.submitted:
         if not st.session_state.correct_answer_shown:
             col1, col2 = st.columns(2)
@@ -153,7 +150,7 @@ def main():
                     if week == "Mixed Quiz (50 Questions)":
                         st.session_state.mixed_quiz_questions = generate_mixed_quiz(50)
 
-    # Sidebar with stats
+
     with st.sidebar:
         st.markdown("### Quiz Statistics 📊")
         st.markdown(f"**Current Score:** {st.session_state.current_score}/{st.session_state.questions_answered}")
